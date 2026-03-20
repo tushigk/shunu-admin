@@ -9,7 +9,7 @@ export const siteConfig = {
   },
 };
 
-// export const siteUrl = "https://backend.afterkiss.space";
-export const siteUrl = "http://localhost:3080";
+export const siteUrl = "https://shunu.zurhai.com";
+// export const siteUrl = "http://localhost:3080";
 
 export type SiteConfig = typeof siteConfig;
