@@ -67,7 +67,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         fetcher,
         {
             revalidateOnFocus: true,
-            refreshInterval: 5000, // Check session validity every 5 seconds
             shouldRetryOnError: false,
         }
     );
