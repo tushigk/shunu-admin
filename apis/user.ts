@@ -41,3 +41,7 @@ export const me2 = async () => {
   }
 };
 
+export const updateAvatar = async (formData: FormData, id: string) => {
+  const res = await appHttpRequest.post(`/${id}/avatar`, formData);
+  return res;
+};

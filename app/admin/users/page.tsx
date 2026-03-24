@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import useSWR from 'swr';
-import { getUsers, deleteUser } from '@/apis/user';
+import { getUsers, deleteUser, updateAvatar } from '@/apis/user';
 import toast from 'react-hot-toast';
 import {
     Mail,
@@ -60,6 +60,20 @@ export default function UsersPage() {
     const handleAdjustExp = (id: string) => {
         setSelectedUserId(id);
         setIsAdjustExpOpen(true);
+    };
+
+    const handleUploadAvatar = async (id: string, file: File) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        const load = toast.loading('Uploading avatar...');
+        try {
+            await updateAvatar(formData, id);
+            toast.success('Avatar updated successfully', { id: load });
+            mutate();
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'Failed to upload avatar';
+            toast.error(message, { id: load });
+        }
     };
 
     return (
@@ -138,8 +152,26 @@ export default function UsersPage() {
                                     <tr key={user._id} className="hover:bg-white/2 transition-colors group">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500 font-bold">
-                                                    {(user.name || user.username || user.email)[0].toUpperCase()}
+                                                <div className="relative group/avatar">
+                                                    <div className="w-10 h-10 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500 font-bold overflow-hidden">
+                                                        {user.avatar ? (
+                                                            <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            (user.name || user.username || user.email)[0].toUpperCase()
+                                                        )}
+                                                    </div>
+                                                    <label className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover/avatar:opacity-100 rounded-full cursor-pointer transition-opacity">
+                                                        <Plus className="w-4 h-4 text-white" />
+                                                        <input
+                                                            type="file"
+                                                            className="hidden"
+                                                            accept="image/*"
+                                                            onChange={(e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (file) handleUploadAvatar(user._id, file);
+                                                            }}
+                                                        />
+                                                    </label>
                                                 </div>
                                                 <div>
                                                     <p className="font-medium text-white group-hover:text-blue-400 transition-colors">

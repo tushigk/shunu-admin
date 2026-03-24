@@ -17,6 +17,7 @@ export interface User {
     provider?: string;
     gender?: string;
     membershipExpiresAt?: string;
+    avatar?: string;
 }
 
 interface AuthContextType {
@@ -38,8 +39,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         const savedToken = localStorage.getItem("token");
         if (savedToken) {
-            // Internal function to check expiration without needing token as arg if it's in closure
-            // but let's keep it simple.
             const loginTime = localStorage.getItem("login_time");
             const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
             const isExpired = !loginTime || (Date.now() - parseInt(loginTime) > sevenDaysInMs);
@@ -47,9 +46,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             if (isExpired) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("login_time");
-                setTokenState(null);
+                React.startTransition(() => {
+                    setTokenState(null);
+                });
             } else {
-                setTokenState(savedToken);
+                React.startTransition(() => {
+                    setTokenState(savedToken);
+                });
             }
         }
     }, []);
@@ -72,7 +75,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("login_time");
-        setTokenState(null);
+        React.startTransition(() => {
+            setTokenState(null);
+        });
         mutate(`${siteUrl}/users/me`, null, false);
     };
 
@@ -93,7 +98,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const login = (newToken: string, userData?: User) => {
         localStorage.setItem("token", newToken);
         localStorage.setItem("login_time", Date.now().toString());
-        setTokenState(newToken);
+        React.startTransition(() => {
+            setTokenState(newToken);
+        });
         if (userData) {
             mutate(`${siteUrl}/users/me`, userData, false);
         } else {
