@@ -378,7 +378,7 @@ export default function ForumPage() {
                                                                 <CheckCircle2 className="w-4 h-4" />
                                                             </button>
                                                             <button
-                                                                onClick={() => handleResolveReport(report._id, 'DISMISS')}
+                                                                onClick={() => handleDeletePost(report._id)}
                                                                 className="p-2 hover:bg-gray-500/10 hover:text-gray-300 rounded-lg transition-colors"
                                                                 title="Dismiss Report"
                                                             >
