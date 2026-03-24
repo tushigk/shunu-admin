@@ -28,7 +28,6 @@ const menuItems = [
     { name: 'Forum', icon: MessagesSquare, href: '/admin/forum' },
     { name: 'Membership', icon: CreditCard, href: '/admin/membership' },
     { name: 'Finance', icon: LayoutDashboard, href: '/admin/finance' },
-    { name: 'Levels', icon: ShieldAlert, href: '/admin/experience' },
     { name: 'Banner', icon: ShieldAlert, href: '/admin/banner' },
 
 ];

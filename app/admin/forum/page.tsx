@@ -46,13 +46,21 @@ interface Report {
     reporter: {
         _id: string;
         username: string;
+        avatar?: string;
     };
-    targetType: 'POST' | 'COMMENT';
-    targetId: string;
+    post: {
+        _id: string;
+        title: string;
+        image?: {
+            _id: string;
+            url: string;
+        };
+        isPinned: boolean;
+    };
     reason: string;
-    status: 'PENDING' | 'RESOLVED' | 'DISMISSED';
+    isResolved: boolean;
     createdAt: string;
-    post?: Post;
+    updatedAt: string;
 }
 
 export default function ForumPage() {
@@ -304,36 +312,55 @@ export default function ForumPage() {
                                     reports.map((report: Report) => (
                                         <tr key={report._id} className="hover:bg-white/2 transition-colors group">
                                             <td className="px-6 py-4">
-                                                <div className="flex flex-col">
-                                                    <p className="text-sm font-semibold text-white">
-                                                        @{report.reporter.username}
-                                                    </p>
-                                                    <p className="text-xs text-red-400/80 mt-1">
-                                                        {report.reason}
-                                                    </p>
+                                                <div className="flex items-center gap-3">
+                                                    {report.reporter?.avatar ? (
+                                                        <div className="w-8 h-8 rounded-full overflow-hidden relative">
+                                                            <Image src={report.reporter.avatar} alt={report.reporter.username || 'user'} fill className="object-cover" />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+                                                            <UserIcon className="w-4 h-4 text-gray-400" />
+                                                        </div>
+                                                    )}
+                                                    <div className="flex flex-col">
+                                                        <p className="text-sm font-semibold text-white">
+                                                            @{report.reporter?.username || 'unknown'}
+                                                        </p>
+                                                        <p className="text-xs text-red-400/80 mt-1">
+                                                            {report.reason}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <div className="flex flex-col">
-                                                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded inline-block w-fit mb-1 ${report.targetType === 'POST' ? 'bg-blue-500/10 text-blue-400' : 'bg-purple-500/10 text-purple-400'
-                                                        }`}>
-                                                        {report.targetType}
-                                                    </span>
-                                                    <span className="text-xs text-gray-500 truncate max-w-[150px]">
-                                                        ID: {report.targetId}
-                                                    </span>
+                                                <div className="flex items-center gap-3">
+                                                    {report.post?.image?.url ? (
+                                                        <div className="w-10 h-10 rounded-lg bg-white/10 shrink-0 flex items-center justify-center overflow-hidden border border-white/10 relative">
+                                                            <Image src={report.post.image.url} alt="Post" fill className="object-cover" />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="w-10 h-10 rounded-lg bg-white/5 shrink-0 flex items-center justify-center border border-white/10">
+                                                            <MessagesSquare className="w-4 h-4 text-gray-500" />
+                                                        </div>
+                                                    )}
+                                                    <div className="flex flex-col min-w-0">
+                                                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded inline-block w-fit mb-1 bg-blue-500/10 text-blue-400">
+                                                            POST
+                                                        </span>
+                                                        <span className="text-xs text-gray-200 truncate max-w-[200px]">
+                                                            {report.post?.title || 'Unknown post'}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${report.status === 'PENDING'
+                                                <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${!report.isResolved
                                                     ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400'
-                                                    : report.status === 'RESOLVED'
-                                                        ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                                                        : 'bg-gray-500/10 border-gray-500/20 text-gray-400'
+                                                    : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
                                                     }`}>
-                                                    <div className={`w-1.5 h-1.5 rounded-full ${report.status === 'PENDING' ? 'bg-yellow-500' : report.status === 'RESOLVED' ? 'bg-emerald-500' : 'bg-gray-500'
+                                                    <div className={`w-1.5 h-1.5 rounded-full ${!report.isResolved ? 'bg-yellow-500' : 'bg-emerald-500'
                                                         }`} />
-                                                    {report.status}
+                                                    {!report.isResolved ? 'PENDING' : 'RESOLVED'}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-400">
@@ -341,7 +368,7 @@ export default function ForumPage() {
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex items-center justify-end gap-2 text-gray-400">
-                                                    {report.status === 'PENDING' && (
+                                                    {!report.isResolved && (
                                                         <>
                                                             <button
                                                                 onClick={() => handleResolveReport(report._id, 'RESOLVE')}
