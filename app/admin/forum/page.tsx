@@ -82,6 +82,7 @@ export default function ForumPage() {
     const reports = reportsData?.data || [];
     const totalPages = postsData?.totalPages || 1;
 
+
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
         setPage(1);
@@ -92,6 +93,7 @@ export default function ForumPage() {
             try {
                 await networkApi.adminDeleteNetworkPost(id);
                 mutatePosts();
+                mutateReports();
             } catch (error) {
                 console.error('Failed to delete post:', error);
                 alert('Failed to delete post');
@@ -378,9 +380,9 @@ export default function ForumPage() {
                                                                 <CheckCircle2 className="w-4 h-4" />
                                                             </button>
                                                             <button
-                                                                onClick={() => handleDeletePost(report._id)}
-                                                                className="p-2 hover:bg-gray-500/10 hover:text-gray-300 rounded-lg transition-colors"
-                                                                title="Dismiss Report"
+                                                                onClick={() => { if (report.post?._id) handleDeletePost(report.post._id); }}
+                                                                className="p-2 hover:bg-red-500/10 hover:text-red-500 rounded-lg transition-colors"
+                                                                title="Delete Post"
                                                             >
                                                                 <Trash2 className="w-4 h-4" />
                                                             </button>
