@@ -1,15 +1,15 @@
 export const siteConfig = {
-  name: "ProjectM Admin",
+  name: "Boosters",
   url: "",
   ogImage: "",
-  description: "ProjectM platform administration.",
+  description: "Томчуудад зориулсан.",
   links: {
     youtube: "https://www.youtube.com",
     twitter: "https://twitter.com",
   },
 };
 
-export const siteUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3080";
-// export const siteUrl = "https://your-production-api.com";
+export const siteUrl = "https://shunu.zurhai.com";
+// export const siteUrl = "http://localhost:3080";
 
 export type SiteConfig = typeof siteConfig;

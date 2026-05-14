@@ -7,7 +7,7 @@ import { authApi } from "@/apis";
 import { useAuth, User } from "@/components/providers/AuthProvider";
 
 type LoginPayload = {
-    phone: string;
+    username: string;
     password: string;
 };
 
@@ -21,7 +21,7 @@ export default function AdminLoginPage() {
     const { login: authLogin, isAuthenticated, isLoading: authLoading } = useAuth();
     const router = useRouter();
 
-    const [phone, setPhone] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -36,7 +36,7 @@ export default function AdminLoginPage() {
         setError(null);
 
         try {
-            const res = await authApi.login({ phone, password } as LoginPayload);
+            const res = await authApi.login({ username, password } as LoginPayload);
 
             const data: LoginResponse =
                 typeof res === "object" && res !== null && "data" in res
@@ -81,7 +81,7 @@ export default function AdminLoginPage() {
                         <ShieldCheck className="text-white w-8 h-8" />
                     </div>
                     <h1 className="text-3xl font-bold text-white tracking-tight">
-                        ProjectM Admin
+                        AfterKiss Admin
                     </h1>
                     <p className="text-gray-400 mt-2">Sign in to manage your platform</p>
                 </div>
@@ -104,8 +104,8 @@ export default function AdminLoginPage() {
                                 </div>
                                 <input
                                     type="text"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                     className="block w-full pl-11 pr-4 py-3 bg-black/40 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all font-medium"
                                     placeholder="Username"
                                     required
@@ -160,7 +160,7 @@ export default function AdminLoginPage() {
                 </div>
 
                 <p className="text-center text-gray-500 text-sm mt-8">
-                    &copy; {new Date().getFullYear()} ProjectM. All rights reserved.
+                    &copy; {new Date().getFullYear()} AfterKiss. All rights reserved.
                 </p>
             </div>
         </div>

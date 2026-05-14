@@ -12,8 +12,7 @@ import {
     MessagesSquare,
     ShieldAlert,
     Bot,
-    Gamepad2,
-    Film
+    Gamepad2
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -27,7 +26,6 @@ const menuItems = [
     { name: 'Users', icon: Users, href: '/admin/users' },
     { name: 'Forum', icon: MessagesSquare, href: '/admin/forum' },
     { name: 'Membership', icon: CreditCard, href: '/admin/membership' },
-    { name: 'Movies', icon: Film, href: '/admin/movies' },
     { name: 'Finance', icon: LayoutDashboard, href: '/admin/finance' },
     { name: 'Banner', icon: ShieldAlert, href: '/admin/banner' },
     { name: 'AI Humans', icon: Bot, href: '/admin/ai-human' },
@@ -90,7 +88,7 @@ export default function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsO
                         <div className="w-10 h-10 rounded-full bg-linear-to-tr from-purple-500 to-pink-500 border border-white/10" />
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-white truncate">Administrator</p>
-                            <p className="text-xs text-gray-500 truncate">admin@projectm.app</p>
+                            <p className="text-xs text-gray-500 truncate">admin@afterkiss.com</p>
                         </div>
                     </div>
                 </div>
